@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabaseServer } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
 
     if (session.payment_status === 'paid') {
-      await supabase.from('purchases').insert({
+      await supabaseServer.from('purchases').insert({
         product_id: session.metadata?.productId,
         buyer_email: session.customer_details?.email,
         stripe_session_id: session.id,

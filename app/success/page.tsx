@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabaseServer } from '@/lib/supabase-server'
 import Link from 'next/link'
 import Stripe from 'stripe'
 
@@ -12,7 +12,7 @@ export default async function SuccessPage({
   const { session_id } = await searchParams
   const session = await stripe.checkout.sessions.retrieve(session_id)
 
-  const { data: purchase } = await supabase
+  const { data: purchase } = await supabaseServer
     .from('purchases')
     .select('*, products(*)')
     .eq('stripe_session_id', session_id)
